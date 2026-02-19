@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { supabase } from '../supabaseClient';
 import { quizQuestions, calculateResult } from '../data/QuizData';
+import { getStreamExplanation } from '../Services/geminiService';
 
 export default function Quiz({ user, onQuizComplete }) {
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -8,6 +9,8 @@ export default function Quiz({ user, onQuizComplete }) {
   const [selectedOption, setSelectedOption] = useState(null);
   const [showResults, setShowResults] = useState(false);
   const [results, setResults] = useState(null);
+  const [aiExplanation, setAiExplanation] = useState('');
+  const [loadingExplanation, setLoadingExplanation] = useState(false);
 
   const question = quizQuestions[currentQuestion];
   const isLastQuestion = currentQuestion === quizQuestions.length - 1;
@@ -32,6 +35,10 @@ export default function Quiz({ user, onQuizComplete }) {
       setResults(result);
       setShowResults(true);
       saveResultToDatabase(result);
+      
+      // Get AI explanation
+      setLoadingExplanation(true);
+      getStudentDataAndGenerateExplanation(newAnswers, result);
     } else {
       // Move to next question
       setCurrentQuestion(currentQuestion + 1);
@@ -55,6 +62,23 @@ export default function Quiz({ user, onQuizComplete }) {
         stream: result.topStream 
       })
       .eq('id', user.id);
+  }
+
+  async function getStudentDataAndGenerateExplanation(answersArray, result) {
+    // Get student's name and language from database
+    const { data } = await supabase
+      .from('students')
+      .select('full_name, language')
+      .eq('id', user.id)
+      .single();
+
+    const studentName = data?.full_name || 'Student';
+    const language = data?.language || 'English';
+
+    // Generate AI explanation
+    const explanation = await getStreamExplanation(answersArray, result, language, studentName);
+    setAiExplanation(explanation);
+    setLoadingExplanation(false);
   }
 
   if (showResults) {
@@ -116,7 +140,7 @@ export default function Quiz({ user, onQuizComplete }) {
             border: '2px solid #fdba74',
             borderRadius: 12,
             padding: 20,
-            marginBottom: 24,
+            marginBottom: 16,
             textAlign: 'center'
           }}>
             <p style={{ fontSize: '1.1rem', fontWeight: 700, color: '#f97316', marginBottom: 4 }}>
@@ -126,6 +150,37 @@ export default function Quiz({ user, onQuizComplete }) {
               Best match for your interests and strengths!
             </p>
           </div>
+
+          {loadingExplanation && (
+            <div style={{
+              background: '#f0fdf4',
+              border: '1px solid #bbf7d0',
+              borderRadius: 12,
+              padding: 20,
+              marginBottom: 24,
+              textAlign: 'center',
+              color: '#166534'
+            }}>
+              💬 Generating your personalized guidance...
+            </div>
+          )}
+
+          {aiExplanation && !loadingExplanation && (
+            <div style={{
+              background: '#f0fdf4',
+              border: '1px solid #bbf7d0',
+              borderRadius: 12,
+              padding: 20,
+              marginBottom: 24
+            }}>
+              <p style={{ fontSize: '0.85rem', fontWeight: 600, color: '#166534', marginBottom: 8 }}>
+                💬 Your Personalized Guidance
+              </p>
+              <p style={{ fontSize: '0.95rem', color: '#166534', lineHeight: 1.6 }}>
+                {aiExplanation}
+              </p>
+            </div>
+          )}
 
           <button
             onClick={onQuizComplete}
