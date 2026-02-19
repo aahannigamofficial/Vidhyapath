@@ -1,9 +1,60 @@
 import { supabase } from '../supabaseClient';
+import { useState } from 'react';
+import CareerPaths from './CareerPaths';
 
 export default function Dashboard({ user }) {
+  const [showCareerPaths, setShowCareerPaths] = useState(false);
+
   async function handleLogout() {
     await supabase.auth.signOut();
     window.location.reload();
+  }
+
+  if (showCareerPaths) {
+    return (
+      <div>
+        <div style={{
+          padding: '16px 32px',
+          background: 'white',
+          borderBottom: '1px solid #e2d9c8',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center'
+        }}>
+          <button
+            onClick={() => setShowCareerPaths(false)}
+            style={{
+              padding: '10px 20px',
+              background: 'transparent',
+              color: '#6b7280',
+              border: '2px solid #e2d9c8',
+              borderRadius: 8,
+              fontSize: '0.9rem',
+              fontWeight: 600,
+              cursor: 'pointer'
+            }}
+          >
+            ← Back to Dashboard
+          </button>
+          <button
+            onClick={handleLogout}
+            style={{
+              padding: '10px 20px',
+              background: 'transparent',
+              color: '#6b7280',
+              border: '2px solid #e2d9c8',
+              borderRadius: 8,
+              fontSize: '0.9rem',
+              fontWeight: 600,
+              cursor: 'pointer'
+            }}
+          >
+            🚪 Log Out
+          </button>
+        </div>
+        <CareerPaths />
+      </div>
+    );
   }
 
   return (
@@ -50,17 +101,37 @@ export default function Dashboard({ user }) {
           padding: 24,
           marginBottom: 24
         }}>
-          <p style={{ color: '#166534', fontSize: '0.95rem', lineHeight: 1.6 }}>
-            ✅ Your account is active! Next steps: <br/>
-            • Complete your student profile<br/>
-            • Take the aptitude quiz<br/>
-            • Explore career paths
+          <p style={{ color: '#166534', fontSize: '0.95rem', lineHeight: 1.6, marginBottom: 16 }}>
+            ✅ Your account is active! You've completed:
           </p>
+          <ul style={{ color: '#166534', fontSize: '0.9rem', marginLeft: 20, lineHeight: 1.8 }}>
+            <li>Profile setup ✓</li>
+            <li>Aptitude quiz ✓</li>
+          </ul>
         </div>
+
+        <button
+          onClick={() => setShowCareerPaths(true)}
+          style={{
+            width: '100%',
+            padding: 16,
+            background: '#f97316',
+            color: 'white',
+            border: 'none',
+            borderRadius: 10,
+            fontSize: '1rem',
+            fontWeight: 700,
+            cursor: 'pointer',
+            marginBottom: 12
+          }}
+        >
+          🗺️ Explore Career Paths →
+        </button>
 
         <button
           onClick={handleLogout}
           style={{
+            width: '100%',
             padding: '12px 24px',
             background: 'transparent',
             color: '#6b7280',
