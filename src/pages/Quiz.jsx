@@ -25,22 +25,22 @@ export default function Quiz({ user, onQuizComplete }) {
       return;
     }
 
-    // Save the answer
+    
     const newAnswers = [...answers, question.options[selectedOption]];
     setAnswers(newAnswers);
 
     if (isLastQuestion) {
-      // Calculate and show results
+      
       const result = calculateResult(newAnswers);
       setResults(result);
       setShowResults(true);
       saveResultToDatabase(result);
       
-      // Get AI explanation
+      
       setLoadingExplanation(true);
       getStudentDataAndGenerateExplanation(newAnswers, result);
     } else {
-      // Move to next question
+      
       setCurrentQuestion(currentQuestion + 1);
       setSelectedOption(null);
     }
