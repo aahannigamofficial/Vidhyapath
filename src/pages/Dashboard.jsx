@@ -94,7 +94,7 @@ export default function Dashboard({ user }) {
             🚪 Log Out
           </button>
         </div>
-        <CollegeDirectory />
+        <CollegeDirectory user={user} />
       </div>
     );
   }
