@@ -2,6 +2,7 @@ import { supabase } from '../supabaseClient';
 import { useState } from 'react';
 import CareerPaths from './CareerPaths';
 import CollegeDirectory from './CollegeDirectory';
+import CollegeRecommendations from './CollegeRecommendations';
 
 export default function Dashboard({ user }) {
   const [currentView, setCurrentView] = useState('dashboard');
@@ -10,6 +11,50 @@ export default function Dashboard({ user }) {
     await supabase.auth.signOut();
     window.location.reload();
   }
+
+  if (currentView === 'recommendations') {
+  return (
+    <div>
+      <div style={{
+        padding: '16px 32px',
+        background: 'white',
+        borderBottom: '1px solid #e2d9c8',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+      }}>
+        <button
+          onClick={() => setCurrentView('dashboard')}
+          style={{
+            padding: '10px 20px',
+            background: 'transparent',
+            color: '#6b7280',
+            border: '2px solid #e2d9c8',
+            borderRadius: 8,
+            fontSize: '0.9rem',
+            fontWeight: 600,
+            cursor: 'pointer'
+          }}
+        >
+          ← Back to Dashboard
+        </button>
+        <button onClick={handleLogout} style={{
+          padding: '10px 20px',
+          background: 'transparent',
+          color: '#6b7280',
+          border: '2px solid #e2d9c8',
+          borderRadius: 8,
+          fontSize: '0.9rem',
+          fontWeight: 600,
+          cursor: 'pointer'
+        }}>
+          🚪 Log Out
+        </button>
+      </div>
+      <CollegeRecommendations user={user} />
+    </div>
+  );
+}
 
   if (currentView === 'career-paths') {
     return (
@@ -22,6 +67,23 @@ export default function Dashboard({ user }) {
           justifyContent: 'space-between',
           alignItems: 'center'
         }}>
+          <button
+  onClick={() => setCurrentView('recommendations')}
+  style={{
+    width: '100%',
+    padding: 16,
+    background: 'linear-gradient(135deg, #f97316, #fb923c)',
+    color: 'white',
+    border: 'none',
+    borderRadius: 10,
+    fontSize: '1rem',
+    fontWeight: 700,
+    cursor: 'pointer',
+    marginBottom: 12
+  }}
+>
+  ⭐ My Recommended Colleges →
+</button>
           <button
             onClick={() => setCurrentView('dashboard')}
             style={{
