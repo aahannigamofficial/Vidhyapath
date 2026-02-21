@@ -1,16 +1,17 @@
 import { supabase } from '../supabaseClient';
 import { useState } from 'react';
 import CareerPaths from './CareerPaths';
+import CollegeDirectory from './CollegeDirectory';
 
 export default function Dashboard({ user }) {
-  const [showCareerPaths, setShowCareerPaths] = useState(false);
+  const [currentView, setCurrentView] = useState('dashboard');
 
   async function handleLogout() {
     await supabase.auth.signOut();
     window.location.reload();
   }
 
-  if (showCareerPaths) {
+  if (currentView === 'career-paths') {
     return (
       <div>
         <div style={{
@@ -22,7 +23,7 @@ export default function Dashboard({ user }) {
           alignItems: 'center'
         }}>
           <button
-            onClick={() => setShowCareerPaths(false)}
+            onClick={() => setCurrentView('dashboard')}
             style={{
               padding: '10px 20px',
               background: 'transparent',
@@ -36,8 +37,37 @@ export default function Dashboard({ user }) {
           >
             ← Back to Dashboard
           </button>
+          <button onClick={handleLogout} style={{
+            padding: '10px 20px',
+            background: 'transparent',
+            color: '#6b7280',
+            border: '2px solid #e2d9c8',
+            borderRadius: 8,
+            fontSize: '0.9rem',
+            fontWeight: 600,
+            cursor: 'pointer'
+          }}>
+            🚪 Log Out
+          </button>
+        </div>
+        <CareerPaths />
+      </div>
+    );
+  }
+
+  if (currentView === 'colleges') {
+    return (
+      <div>
+        <div style={{
+          padding: '16px 32px',
+          background: 'white',
+          borderBottom: '1px solid #e2d9c8',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center'
+        }}>
           <button
-            onClick={handleLogout}
+            onClick={() => setCurrentView('dashboard')}
             style={{
               padding: '10px 20px',
               background: 'transparent',
@@ -49,10 +79,22 @@ export default function Dashboard({ user }) {
               cursor: 'pointer'
             }}
           >
+            ← Back to Dashboard
+          </button>
+          <button onClick={handleLogout} style={{
+            padding: '10px 20px',
+            background: 'transparent',
+            color: '#6b7280',
+            border: '2px solid #e2d9c8',
+            borderRadius: 8,
+            fontSize: '0.9rem',
+            fontWeight: 600,
+            cursor: 'pointer'
+          }}>
             🚪 Log Out
           </button>
         </div>
-        <CareerPaths />
+        <CollegeDirectory />
       </div>
     );
   }
@@ -111,7 +153,25 @@ export default function Dashboard({ user }) {
         </div>
 
         <button
-          onClick={() => setShowCareerPaths(true)}
+          onClick={() => setCurrentView('colleges')}
+          style={{
+            width: '100%',
+            padding: 16,
+            background: '#166534',
+            color: 'white',
+            border: 'none',
+            borderRadius: 10,
+            fontSize: '1rem',
+            fontWeight: 700,
+            cursor: 'pointer',
+            marginBottom: 12
+          }}
+        >
+          🏫 Browse Government Colleges →
+        </button>
+
+        <button
+          onClick={() => setCurrentView('career-paths')}
           style={{
             width: '100%',
             padding: 16,
