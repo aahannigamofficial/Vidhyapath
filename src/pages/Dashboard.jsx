@@ -3,6 +3,7 @@ import { useState } from 'react';
 import CareerPaths from './CareerPaths';
 import CollegeDirectory from './CollegeDirectory';
 import CollegeRecommendations from './CollegeRecommendations';
+import Timeline from './Timeline';
 
 export default function Dashboard({ user }) {
   const [currentView, setCurrentView] = useState('dashboard');
@@ -12,20 +13,38 @@ export default function Dashboard({ user }) {
     window.location.reload();
   }
 
-  if (currentView === 'recommendations') {
-  return (
-    <div>
-      <div style={{
-        padding: '16px 32px',
-        background: 'white',
-        borderBottom: '1px solid #e2d9c8',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-      }}>
-        <button
-          onClick={() => setCurrentView('dashboard')}
-          style={{
+  // --- VIEW: TIMELINE ---
+  if (currentView === 'timeline') {
+    return (
+      <div>
+        <div style={{
+          padding: '16px 32px',
+          background: 'white',
+          borderBottom: '1px solid #e2d9c8',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center'
+        }}>
+          {/* Active Button Style for Timeline header if needed, otherwise just title or back button */}
+          <button
+            onClick={() => setCurrentView('dashboard')}
+            style={{
+              padding: '10px 20px',
+              background: 'transparent',
+              color: '#6b7280',
+              border: '2px solid #e2d9c8',
+              borderRadius: 8,
+              fontSize: '0.9rem',
+              fontWeight: 600,
+              cursor: 'pointer'
+            }}
+          >
+            ← Back to Dashboard
+          </button>
+          
+          <h2 style={{ margin: 0, fontSize: '1.2rem', color: '#0369a1' }}>Important Deadlines</h2>
+
+          <button onClick={handleLogout} style={{
             padding: '10px 20px',
             background: 'transparent',
             color: '#6b7280',
@@ -34,28 +53,61 @@ export default function Dashboard({ user }) {
             fontSize: '0.9rem',
             fontWeight: 600,
             cursor: 'pointer'
-          }}
-        >
-          ← Back to Dashboard
-        </button>
-        <button onClick={handleLogout} style={{
-          padding: '10px 20px',
-          background: 'transparent',
-          color: '#6b7280',
-          border: '2px solid #e2d9c8',
-          borderRadius: 8,
-          fontSize: '0.9rem',
-          fontWeight: 600,
-          cursor: 'pointer'
-        }}>
-          🚪 Log Out
-        </button>
+          }}>
+            🚪 Log Out
+          </button>
+        </div>
+        <Timeline user={user} />
       </div>
-      <CollegeRecommendations user={user} />
-    </div>
-  );
-}
+    );
+  }
 
+  // --- VIEW: RECOMMENDATIONS ---
+  if (currentView === 'recommendations') {
+    return (
+      <div>
+        <div style={{
+          padding: '16px 32px',
+          background: 'white',
+          borderBottom: '1px solid #e2d9c8',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center'
+        }}>
+          <button
+            onClick={() => setCurrentView('dashboard')}
+            style={{
+              padding: '10px 20px',
+              background: 'transparent',
+              color: '#6b7280',
+              border: '2px solid #e2d9c8',
+              borderRadius: 8,
+              fontSize: '0.9rem',
+              fontWeight: 600,
+              cursor: 'pointer'
+            }}
+          >
+            ← Back to Dashboard
+          </button>
+          <button onClick={handleLogout} style={{
+            padding: '10px 20px',
+            background: 'transparent',
+            color: '#6b7280',
+            border: '2px solid #e2d9c8',
+            borderRadius: 8,
+            fontSize: '0.9rem',
+            fontWeight: 600,
+            cursor: 'pointer'
+          }}>
+            🚪 Log Out
+          </button>
+        </div>
+        <CollegeRecommendations user={user} />
+      </div>
+    );
+  }
+
+  // --- VIEW: CAREER PATHS ---
   if (currentView === 'career-paths') {
     return (
       <div>
@@ -68,22 +120,22 @@ export default function Dashboard({ user }) {
           alignItems: 'center'
         }}>
           <button
-  onClick={() => setCurrentView('recommendations')}
-  style={{
-    width: '100%',
-    padding: 16,
-    background: 'linear-gradient(135deg, #f97316, #fb923c)',
-    color: 'white',
-    border: 'none',
-    borderRadius: 10,
-    fontSize: '1rem',
-    fontWeight: 700,
-    cursor: 'pointer',
-    marginBottom: 12
-  }}
->
-  ⭐ My Recommended Colleges →
-</button>
+            onClick={() => setCurrentView('recommendations')}
+            style={{
+              width: 'auto', // Changed to auto so it fits in header
+              padding: '10px 20px',
+              background: 'linear-gradient(135deg, #f97316, #fb923c)',
+              color: 'white',
+              border: 'none',
+              borderRadius: 8,
+              fontSize: '0.9rem',
+              fontWeight: 700,
+              cursor: 'pointer',
+              marginRight: 10
+            }}
+          >
+            ⭐ Recommended Colleges
+          </button>
           <button
             onClick={() => setCurrentView('dashboard')}
             style={{
@@ -117,6 +169,7 @@ export default function Dashboard({ user }) {
     );
   }
 
+  // --- VIEW: COLLEGES ---
   if (currentView === 'colleges') {
     return (
       <div>
@@ -161,6 +214,7 @@ export default function Dashboard({ user }) {
     );
   }
 
+  // --- MAIN DASHBOARD VIEW ---
   return (
     <div style={{
       minHeight: '100vh',
@@ -213,6 +267,25 @@ export default function Dashboard({ user }) {
             <li>Aptitude quiz ✓</li>
           </ul>
         </div>
+
+        {/* --- ADDED TIMELINE BUTTON HERE --- */}
+        <button
+          onClick={() => setCurrentView('timeline')}
+          style={{
+            width: '100%',
+            padding: 16,
+            background: '#0369a1',
+            color: 'white',
+            border: 'none',
+            borderRadius: 10,
+            fontSize: '1rem',
+            fontWeight: 700,
+            cursor: 'pointer',
+            marginBottom: 12
+          }}
+        >
+          📅 Important Deadlines →
+        </button>
 
         <button
           onClick={() => setCurrentView('colleges')}
