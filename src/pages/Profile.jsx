@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
+import MarksheetScanner from '../components/MarksheetScanner';
 
 export default function Profile({ user, onProfileComplete }) {
   const [loading, setLoading] = useState(true);
@@ -60,6 +61,18 @@ export default function Profile({ user, onProfileComplete }) {
     setSaving(false);
   }
 
+  function handleScannedData(data) {
+    if (data.fullName) {
+      setFullName(data.fullName);
+    }
+    if (data.percentage) {
+      setMessage(`✨ Detected ${data.percentage}% in marksheet!`);
+    }
+    if (data.suggestedStream) {
+      setMessage(msg => (msg ? msg + ` Stream detected: ${data.suggestedStream}` : `✨ Stream detected: ${data.suggestedStream}`));
+    }
+  }
+
   if (loading) {
     return (
       <div style={{
@@ -96,6 +109,9 @@ export default function Profile({ user, onProfileComplete }) {
         <p style={{ color: '#6b7280', fontSize: '0.95rem', marginBottom: 32 }}>
           Tell us about yourself so we can personalize your experience
         </p>
+
+        {/* Marksheet Scanner */}
+        <MarksheetScanner onDataExtracted={handleScannedData} />
 
         <div style={{ marginBottom: 20 }}>
           <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: 6, color: '#0f1923' }}>
@@ -266,8 +282,8 @@ export default function Profile({ user, onProfileComplete }) {
           <div style={{
             padding: 12,
             borderRadius: 8,
-            background: message.startsWith('✅') ? '#f0fdf4' : '#fef2f2',
-            color: message.startsWith('✅') ? '#166534' : '#991b1b',
+            background: message.startsWith('✅') || message.startsWith('✨') ? '#f0fdf4' : '#fef2f2',
+            color: message.startsWith('✅') || message.startsWith('✨') ? '#166534' : '#991b1b',
             fontSize: '0.85rem',
             textAlign: 'center'
           }}>
