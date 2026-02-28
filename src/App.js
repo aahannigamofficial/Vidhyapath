@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from './supabaseClient';
+import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
 import Quiz from './pages/Quiz';
@@ -11,8 +12,10 @@ function App() {
   const [hasProfile, setHasProfile] = useState(false);
   const [hasQuizResult, setHasQuizResult] = useState(false);
   const [checkingData, setCheckingData] = useState(true);
+  const [showLogin, setShowLogin] = useState(false);
 
   useEffect(() => {
+    // Check if user is already logged in
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
       setLoading(false);
@@ -23,6 +26,7 @@ function App() {
       }
     });
 
+    // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
       if (session?.user) {
@@ -53,6 +57,7 @@ function App() {
     setHasQuizResult(true);
   }
 
+  // Show loading spinner while checking auth
   if (loading || checkingData) {
     return (
       <div style={{
@@ -61,16 +66,36 @@ function App() {
         alignItems: 'center',
         justifyContent: 'center',
         fontFamily: 'sans-serif',
-        color: '#6b7280'
+        color: '#6b7280',
+        background: '#faf8f3'
       }}>
-        Loading...
+        <div style={{ textAlign: 'center' }}>
+          <div style={{
+            width: 60,
+            height: 60,
+            border: '4px solid #e2d9c8',
+            borderTop: '4px solid #f97316',
+            borderRadius: '50%',
+            margin: '0 auto 16px',
+            animation: 'spin 1s linear infinite'
+          }} />
+          <p>Loading VidyaPath...</p>
+        </div>
+        <style>{`
+          @keyframes spin {
+            to { transform: rotate(360deg); }
+          }
+        `}</style>
       </div>
     );
   }
 
-  // Not logged in → show Login
+  // Not logged in → show Landing or Login
   if (!user) {
-    return <Login onLoginSuccess={setUser} />;
+    if (showLogin) {
+      return <Login onLoginSuccess={setUser} />;
+    }
+    return <Landing onGetStarted={() => setShowLogin(true)} />;
   }
 
   // Logged in but no profile → show Profile form
