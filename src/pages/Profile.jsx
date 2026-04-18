@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
-import MarksheetScanner from '../components/MarksheetScanner';
+
 
 export default function Profile({ user, onProfileComplete }) {
   const [loading, setLoading] = useState(true);
@@ -61,17 +61,6 @@ export default function Profile({ user, onProfileComplete }) {
     setSaving(false);
   }
 
-  function handleScannedData(data) {
-    if (data.fullName) {
-      setFullName(data.fullName);
-    }
-    if (data.percentage) {
-      setMessage(`✨ Detected ${data.percentage}% in marksheet!`);
-    }
-    if (data.suggestedStream) {
-      setMessage(msg => (msg ? msg + ` Stream detected: ${data.suggestedStream}` : `✨ Stream detected: ${data.suggestedStream}`));
-    }
-  }
 
   if (loading) {
     return (
@@ -110,8 +99,6 @@ export default function Profile({ user, onProfileComplete }) {
           Tell us about yourself so we can personalize your experience
         </p>
 
-        {/* Marksheet Scanner */}
-        <MarksheetScanner onDataExtracted={handleScannedData} />
 
         <div style={{ marginBottom: 20 }}>
           <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: 6, color: '#0f1923' }}>
