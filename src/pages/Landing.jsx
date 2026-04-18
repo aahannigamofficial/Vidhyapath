@@ -43,7 +43,7 @@ export default function Landing({ onGetStarted }) {
           margin: '0 auto 40px',
           lineHeight: 1.6
         }}>
-          India's first AI-powered career guidance platform for government college students. 
+          India's first AI-powered career guidance platform for aspiring college students. 
           Discover your perfect stream, find nearby colleges, and never miss an admission deadline.
         </p>
 
@@ -76,7 +76,7 @@ export default function Landing({ onGetStarted }) {
           margin: '80px auto 0'
         }}>
           {[
-            { num: '4,800+', label: 'Government Colleges' },
+            { num: '4,800+', label: 'Colleges' },
             { num: '1.2L+', label: 'Students Guided' },
             { num: '38+', label: 'Career Paths' },
             { num: '100%', label: 'Free Forever' }
@@ -106,7 +106,7 @@ export default function Landing({ onGetStarted }) {
         }}>
           {[
             { icon: '🧠', title: 'Aptitude Quiz', desc: 'Find your perfect stream in 5 minutes' },
-            { icon: '🏫', title: 'College Search', desc: '12 government colleges with filters' },
+            { icon: '🏫', title: 'College Search', desc: '10+ colleges with filters' },
             { icon: '🤖', title: 'AI Guidance', desc: 'Personalized recommendations' },
             { icon: '📅', title: 'Deadline Tracker', desc: 'Never miss important dates' }
           ].map((feature, i) => (

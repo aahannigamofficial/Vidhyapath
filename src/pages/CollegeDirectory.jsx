@@ -110,10 +110,10 @@ export default function CollegeDirectory({ user }) {
     }}>
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
         <h1 style={{ fontSize: '2rem', color: '#0f1923', marginBottom: 8 }}>
-          🏫 Government College Directory
+          🏫 College Directory
         </h1>
         <p style={{ color: '#6b7280', fontSize: '1rem', marginBottom: 32 }}>
-          Explore {colleges.length} government colleges across India
+          Explore {colleges.length} colleges across India
         </p>
 
         {/* Search Bar */}

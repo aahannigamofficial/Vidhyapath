@@ -292,10 +292,12 @@ export default function Dashboard({ user }) {
           <h1 style={{ fontSize: '1.8rem', color: '#0f1923', marginBottom: 8 }}>
             Welcome to VidyaPath!
           </h1>
+          
           <p style={{ color: '#6b7280', fontSize: '1rem' }}>
             Logged in as: <strong>{user.email}</strong>
           </p>
         </div>
+        
 
         <div style={{
           background: '#f0fdf4',
@@ -347,7 +349,7 @@ export default function Dashboard({ user }) {
             marginBottom: 12
           }}
         >
-          🏫 Browse Government Colleges →
+          🏫 Browse Colleges →
         </button>
 
         <button
@@ -401,6 +403,9 @@ export default function Dashboard({ user }) {
         >
           🚪 Log Out
         </button>
+        <div style={{ marginTop: 40 }}>
+          <CareerPaths />
+        </div>
       </div>
     </div>
   );
